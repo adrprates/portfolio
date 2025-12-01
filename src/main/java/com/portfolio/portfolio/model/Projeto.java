@@ -24,8 +24,8 @@ public class Projeto {
     @Column(name = "link", nullable = false)
     private String link;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "imagem_url")
+    private String imagemUrl;
 
     @OneToMany(mappedBy = "projeto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProjetoTecnologia> tecnologias = new ArrayList<>();
