@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Projeto</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/projeto/save.css}">
+
+    <style>
+        #techSuggestions {
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            margin-top: 2px;
+            width: 100%;
+            z-index: 10;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        #techSuggestions li {
+            padding: 8px 10px;
+            cursor: pointer;
+            list-style: none;
+            border-bottom: 1px solid #ddd;
+            color: #333;
+        }
+
+        #techSuggestions li:hover {
+            background: #eaeaea;
+        }
+
+        .btn-remove-primary {
+            background: #ad2222;
+            color: #fff;
+            border: 1px solid #ad2222;
+            transition: 0.2s ease;
+            padding: 2px 10px;        
+            border-radius: 6px;        
+            font-size: 0.85rem;        
+        }
+
+        .btn-remove-primary:hover {
+            background: #fff;
+            color: #ad2222;
+            border: 1px solid #ad2222;
+        }
+
+        .tech-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .added-technologies .added-tech-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg bg-white border-bottom">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Portfólio</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/projeto}">Projetos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/tecnologia}">Tecnologias</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/habilidade}">Habilidades</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-4">
+    <h2 class="text-center mb-4">Editar Projeto</h2>
+    <div class="card simple-card">
+        <div class="card-body">
+            <form th:action="@{/projeto/atualizar}" th:object="${projeto}" method="post" id="projetoForm">
+
+                <input type="hidden" th:field="*{id}">
+
+                <div class="mb-3">
+                    <label class="form-label">Título do Projeto</label>
+                    <input type="text" th:field="*{titulo}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Descrição</label>
+                    <textarea th:field="*{descricao}" class="form-control" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Link do Projeto</label>
+                    <input type="text" th:field="*{link}" class="form-control" required>
+                </div>
+
+                <hr class="my-4">
+                <h5 class="mb-3">Tecnologias</h5>
+
+                <div class="tech-selector">
+                    <input type="text" id="techSearch" placeholder="Buscar tecnologia..." class="form-control">
+                    <button type="button" id="addTechBtn" class="btn btn-primary">Adicionar</button>
+                </div>
+
+                <ul id="techSuggestions"></ul>
+                <div id="addedTechnologies" class="added-technologies">
+                    <div th:each="pt : ${projeto.tecnologias}" class="added-tech-item">
+                        <span th:text="${pt.tecnologia.nome}"></span>
+                        <button type="button" class="btn-remove-primary">Remover</button>
+                        <input type="hidden" name="tecnologiaIds" th:value="${pt.tecnologia.id}">
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4">Salvar</button>
+                    <a th:href="@{/projeto}" class="btn btn-secondary px-4 ms-2">Cancelar</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    const technologies = /*[[${todasTecnologias}]]*/ [];
+    let selectedTech = null;
+
+    const searchInput = document.getElementById('techSearch');
+    const suggestionsList = document.getElementById('techSuggestions');
+    const addedTechDiv = document.getElementById('addedTechnologies');
+
+    searchInput.addEventListener('keyup', () => {
+        const query = searchInput.value.toLowerCase();
+        suggestionsList.innerHTML = '';
+        if (!query) return;
+
+        const filtered = technologies.filter(t => t.nome.toLowerCase().includes(query));
+
+        filtered.forEach(t => {
+            const li = document.createElement('li');
+            li.textContent = t.nome;
+            li.addEventListener('click', () => {
+                selectedTech = t;
+                searchInput.value = t.nome;
+                suggestionsList.innerHTML = '';
+            });
+            suggestionsList.appendChild(li);
+        });
+    });
+
+    addedTechDiv.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-remove-primary')) {
+            e.target.parentElement.remove();
+        }
+    });
+
+    document.getElementById('addTechBtn').addEventListener('click', () => {
+        if (!selectedTech) return;
+
+        const exists = Array.from(addedTechDiv.querySelectorAll('input[name="tecnologiaIds"]'))
+            .some(input => input.value == selectedTech.id);
+        if (exists) {
+            searchInput.value = '';
+            selectedTech = null;
+            return;
+        }
+
+        const div = document.createElement('div');
+        div.className = 'added-tech-item';
+        div.innerHTML = `
+            <span>${selectedTech.nome}</span>
+            <button type="button" class="btn-remove-primary">Remover</button>
+            <input type="hidden" name="tecnologiaIds" value="${selectedTech.id}">
+        `;
+
+        addedTechDiv.appendChild(div);
+
+        searchInput.value = '';
+        selectedTech = null;
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

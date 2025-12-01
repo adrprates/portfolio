@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Tecnologia</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/tecnologia/save.css}">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg bg-white border-bottom">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">Portfólio</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/tecnologia}">Tecnologias</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/projeto}">Projetos</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5 pt-4">
+    <h2 class="text-center mb-4">Criar Tecnologia</h2>
+
+    <div class="card simple-card">
+        <div class="card-body">
+
+            <form th:action="@{/tecnologia/salvar}" th:object="${tecnologia}" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Nome da Tecnologia</label>
+                    <input type="text" th:field="*{nome}" class="form-control" placeholder="Ex: Java, Spring, HTML" required>
+                    <div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Descrição</label>
+                    <textarea th:field="*{descricao}" class="form-control" placeholder="Descreva a tecnologia..." rows="4" required></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4">Salvar</button>
+                    <a th:href="@{/tecnologia}" class="btn btn-secondary px-4 ms-2">Cancelar</a>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

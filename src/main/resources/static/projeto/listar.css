@@ -1,0 +1,56 @@
+body {
+  background: #f5f5f5;
+  color: #333;
+  font-family: Arial, sans-serif;
+  padding-bottom: 40px;
+}
+
+.navbar {
+  background: #fff !important;
+}
+.nav-link {
+  color: #333 !important;
+}
+.nav-link.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.simple-card {
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
+.form-control {
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #333;
+}
+.form-control:focus {
+  border-color: #000;
+  box-shadow: none;
+}
+
+.btn-primary {
+  background: #0d6efd;
+  color: #fff;
+  border: 1px solid #0d6efd;
+  transition: 0.2s ease;
+}
+.btn-primary:hover {
+  background: #fff;
+  color: #0d6efd;
+  border: 1px solid #0d6efd;
+}
+
+.btn-secondary {
+  background: #ad2222;
+  color: #fff;
+  border: 1px solid #ad2222;
+  transition: 0.2s ease;
+}
+.btn-secondary:hover {
+  background: #fff;
+  color: #ad2222;
+  border: 1px solid #ad2222;
+}
