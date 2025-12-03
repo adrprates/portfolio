@@ -14,15 +14,14 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/}">Portfólio</a>
-
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="menu">
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/projeto}">Projetos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/tecnologia}">Tecnologias</a></li>
                 <li class="nav-item"><a class="nav-link" th:href="@{/habilidade}">Habilidades</a></li>
-                <li class="nav-item"><a class="nav-link active" th:href="@{/projeto}">Projetos</a></li>
             </ul>
         </div>
     </div>
